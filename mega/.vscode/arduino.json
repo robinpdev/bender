@@ -1,6 +1,7 @@
 {
     "sketch": "mega.ino",
-    "board": "arduino:avr:megaADK",
+    "board": "arduino:avr:mega",
     "output": "../build",
-    "port": "COM3"
+    "port": "COM3",
+    "configuration": "cpu=atmega2560"
 }

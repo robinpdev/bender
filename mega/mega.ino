@@ -5,44 +5,44 @@ const short bgcolor = BLUE;
 
 #include "gui.h"
 
+label testlabel("label");
+label inputlabel("input: ");
+
+input i1;
+input i2;
+input i3;
+input i4;
+
+guitem *colitems[] = {&testlabel, &i1, &i2};
+collumn col(colitems, sizeof(colitems) / 2);
+
+guitem *items[] = {&i4, &col, &i3};
+gui guim(items, sizeof(items) / 2);
+
+
+
 void setup(){
   // start communicatie met pc en due
   Serial.begin(115200);
   Serial1.begin(115200);
-  
+
   // start scherm
   tft.begin();
   tft.setRotation(5);
   tft.fillScreen(WHITE);
 
-  label testlabel("label");
-  label inputlabel("input: ");
-
-  input testinput;
-  input input2;
-
-  
-  guitem* colitems[] = {&testlabel, &testinput, &testlabel};
-  collumn col(colitems, sizeof(colitems) / 2);
-
-  guitem* items[] = {&testlabel, &col, &input2};
-  
-  gui guim(items, sizeof(items) / 2);
   guim.draw();
-  
-  delay(1000);
-  guim.newselect();
-
-  delay(1000);
-  guim.newselect();
-
-  delay(1000);
-  guim.newselect();
-
-
-
 }
 
-void loop(){
-
+void loop()
+{
+  char readkey = keypad.getKey();
+  if (readkey == 'D'){
+    guim.newselect();
+  }else if(isdigit(readkey)){
+    if(guim.selitem != nullptr){
+      guim.selitem->addchar(readkey);
+    }
+  }
+  delay(5);
 }
