@@ -1,6 +1,8 @@
 #include "graphics.h"
 #include "keypad.h"
 
+const short bgcolor = BLUE;
+
 #include "gui.h"
 
 void setup(){
@@ -13,21 +15,31 @@ void setup(){
   tft.setRotation(5);
   tft.fillScreen(WHITE);
 
-  label testlabel("passed");
-  label l2("running test");
+  label testlabel("label");
+  label inputlabel("input: ");
 
-  guitem* items[] = {&testlabel, &l2, &testlabel};
+  input testinput;
+  input input2;
+
+  
+  guitem* colitems[] = {&testlabel, &testinput, &testlabel};
+  collumn col(colitems, sizeof(colitems) / 2);
+
+  guitem* items[] = {&testlabel, &col, &input2};
   
   gui guim(items, sizeof(items) / 2);
   guim.draw();
+  
+  delay(1000);
+  guim.newselect();
 
   delay(1000);
-  l2.color = GREEN;
-  guim.draw();
+  guim.newselect();
 
   delay(1000);
-  l2.text = "passed";
-  l2.update();
+  guim.newselect();
+
+
 
 }
 
