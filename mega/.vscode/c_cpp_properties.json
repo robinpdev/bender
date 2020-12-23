@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\tools\\**",
+                "D:\\Users\\Mario Paret\\Documents\\Arduino\\libraries\\**",
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
+                "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**"
+            ],
+            "forcedInclude": [
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
+            ],
+            "defines": [
+                "USBCON"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "D:/vstudio/testapp/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

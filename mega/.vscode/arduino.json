@@ -1,0 +1,6 @@
+{
+    "sketch": "mega.ino",
+    "board": "arduino:avr:megaADK",
+    "output": "../build",
+    "port": "COM3"
+}
