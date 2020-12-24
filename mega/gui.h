@@ -85,7 +85,8 @@ public:
     }
 };
 
-short boxmargin = 4; //TODO: variable selection box margin
+short boxmargin = 4;
+short boxpadding = 4;
 class input : public guitem
 {
 public:
@@ -105,43 +106,47 @@ public:
     void addchar(char in)
     {
         text += in;
+        width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
         this->update();
     }
 
     guitemreturn draw_specific(guiteminput in) override
     {
+        in.offset.y += boxmargin;
         tft.setTextSize(textsize);
         tft.setTextColor(color);
-        tft.setCursor(in.offset.x, in.offset.y + labelymargin);
+        tft.setCursor(in.offset.x + boxpadding, in.offset.y + boxpadding);
         tft.print(text);
 
+        this->select(inputboxcolor);
+
         prevlen = text.length();
+
         guitemreturn out;
         out.offset = in.offset;
-
         out.offset.x += width;
-        out.offset.y += textsize * 8;
+        out.offset.y += textsize * 8 + 2 * boxpadding;
         return out;
     }
 
     void clear(unsigned short color) const override
     {
-        tft.fillRect(drawpos.x, drawpos.y + labelymargin, prevlen * textsize * 6, textsize * 8, color);
+        tft.fillRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, color);
     }
 
-    void select()
+    void select(short boxcolor)
     {
         if (minwidth > width)
         {
             width = minwidth;
         }
 
-        tft.drawRect(drawpos.x, drawpos.y, width, textsize * 8, color);
+        tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, boxcolor);
     }
 
     void deselect(short bgcolor)
     {
-        tft.drawRect(drawpos.x, drawpos.y, width, textsize * 8, bgcolor);
+        tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, inputboxcolor);
     }
 };
 
@@ -211,7 +216,7 @@ public:
                 }
 
                 selitem = static_cast<input *>(items[i]);
-                selitem->select();
+                selitem->select(inputselcolor);
 
                 selindex = i;
                 return selitem;
@@ -256,7 +261,7 @@ public:
     {
         if (selitem != nullptr)
         {
-            selitem->deselect(bgcolor);
+            selitem->deselect(inputboxcolor);
         }
 
         int startindex = 0;
@@ -292,7 +297,7 @@ public:
             {
 
                 selitem = static_cast<input *>(items[i]);
-                selitem->select();
+                selitem->select(inputselcolor);
 
                 selindex = i;
                 return selitem;
@@ -301,7 +306,7 @@ public:
             {
                 if (selitem != nullptr)
                 {
-                    selitem->deselect(bgcolor);
+                    selitem->deselect(inputboxcolor);
                 }
 
                 collumn *coltest = static_cast<collumn *>(items[i]);

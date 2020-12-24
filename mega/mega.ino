@@ -2,6 +2,8 @@
 #include "keypad.h"
 
 const short bgcolor = BLUE;
+const short inputboxcolor = GREEN;
+const short inputselcolor = RED;
 
 #include "gui.h"
 
@@ -16,8 +18,8 @@ input i4;
 guitem *colitems[] = {&testlabel, &i1, &i2};
 collumn col(colitems, sizeof(colitems) / 2);
 
-guitem *items[] = {&i4, &col, &i3};
-gui guim(items, sizeof(items) / 2);
+guitem *items[] = {&i4, &col, &i3}; 
+gui guim(items, sizeof(items) / 2); 
 
 
 
