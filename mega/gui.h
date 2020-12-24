@@ -23,8 +23,10 @@ class guitem
 {
 public:
     vec drawpos;
+    vec transform;
     bool isinput = false;
     bool iscol = false;
+    bool* parent = nullptr; //this is actually a pointer to a collumn
 
     //virtual function for drawing the types of items
     virtual guitemreturn draw_specific(guiteminput in){};
@@ -33,6 +35,8 @@ public:
     //common draw function that calls the specific draw function for all types of items
     guitemreturn draw(guiteminput in)
     {
+        in.offset.x += transform.x;
+        in.offset.y += transform.y;
         drawpos = in.offset;
         this->clear(bgcolor);
         return this->draw_specific(in);
@@ -107,7 +111,14 @@ public:
     {
         text += in;
         width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
-        this->update();
+        
+        collumn* tparent = static_cast<collumn*>(this->parent);
+        if(tparent == nullptr){
+            this->update();
+            return;
+        }
+        tparent->clear();
+        tparent->draw();
     }
 
     guitemreturn draw_specific(guiteminput in) override
@@ -166,6 +177,11 @@ public:
         items = mitems;
         ilen = milen;
         iscol = true;
+
+        for (int i = 0; i < ilen; i++)
+        {
+            items[i]->parent = this;
+        }
     }
 
     guitemreturn draw_specific(guiteminput in) override
@@ -226,6 +242,12 @@ public:
         selindex = -1;
         selitem = nullptr;
         return nullptr;
+    }
+
+    void clear(unsigned short color) const override {
+        for(int i = 0; i < ilen; i++){
+            items[i]->clear();
+        }
     }
 };
 
