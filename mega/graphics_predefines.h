@@ -1,0 +1,98 @@
+struct vec
+{
+    int x = 0;
+    int y = 0;
+};
+
+struct guiteminput
+{
+    vec offset;
+};
+
+struct guitemreturn
+{
+    vec offset;
+};
+
+class guitem
+{
+public:
+    vec drawpos;
+    vec transform;
+    bool isinput = false;
+    bool iscol = false;
+    bool* parent = nullptr; //this is actually a pointer to a collumn
+
+    //virtual function for drawing the types of items
+    virtual guitemreturn draw_specific(guiteminput in){};
+    virtual void clear(unsigned short) const {};
+
+    guitemreturn draw(guiteminput in);
+    guitemreturn update();
+
+};
+
+//just displays text
+class label : public guitem
+{
+public:
+    String text = "";
+    short color = RED;
+    short textsize = 3;
+    short prevlen = 0;
+
+    label(String mtext);
+
+    guitemreturn draw_specific(guiteminput in) override;
+    void clear(unsigned short) const override;
+};
+
+class input : public guitem
+{
+public:
+    short minwidth = 50;
+    short width = minwidth;
+
+    String text = "";
+    short color = RED;
+    short textsize = 3;
+    short prevlen = 0;
+
+    input();
+    void addchar(char in);
+    void select(short boxolor);
+    void deselect();
+
+    guitemreturn draw_specific(guiteminput in) override;
+    void clear(unsigned short color) const override;
+};
+
+class collumn : public guitem
+{
+public:
+    guitem **items;
+    unsigned int ilen;
+
+    int selindex = -1; //which index of the items is selected
+    input *selitem = nullptr;
+
+    collumn(guitem** mitems, unsigned int milen);
+    input* newselect(bool mode);
+
+    guitemreturn draw_specific(guiteminput in) override;
+    void clear(unsigned short color) const override;
+};
+
+class gui
+{
+public:
+    guitem **items;
+    unsigned int ilen;
+
+    int selindex = -1; //which index of the items is selected
+    input *selitem = nullptr;
+
+    gui(guitem** mitems, unsigned int milen);
+    void draw();
+    input* newselect();
+};

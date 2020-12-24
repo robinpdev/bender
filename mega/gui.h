@@ -1,349 +1,286 @@
 #include "graphics.h"
 
+#include "graphics_predefines.h"
+
 #define renewsel true
 #define nextsel false
 
-struct vec
+//common draw function that calls the specific draw function for all types of items
+guitemreturn guitem::draw(guiteminput in)
 {
-    int x = 0;
-    int y = 0;
-};
+    in.offset.x += transform.x;
+    in.offset.y += transform.y;
+    drawpos = in.offset;
+    this->clear(bgcolor);
+    return this->draw_specific(in);
+}
 
-struct guiteminput
+//for updating items without redrawing all items with the gui manager
+guitemreturn guitem::update()
 {
-    vec offset;
-};
-
-struct guitemreturn
-{
-    vec offset;
-};
-
-class guitem
-{
-public:
-    vec drawpos;
-    vec transform;
-    bool isinput = false;
-    bool iscol = false;
-    bool* parent = nullptr; //this is actually a pointer to a collumn
-
-    //virtual function for drawing the types of items
-    virtual guitemreturn draw_specific(guiteminput in){};
-    virtual void clear(unsigned short color) const {};
-
-    //common draw function that calls the specific draw function for all types of items
-    guitemreturn draw(guiteminput in)
-    {
-        in.offset.x += transform.x;
-        in.offset.y += transform.y;
-        drawpos = in.offset;
-        this->clear(bgcolor);
-        return this->draw_specific(in);
-    }
-
-    //for updating items without redrawing all items with the gui manager
-    guitemreturn update()
-    {
-        guiteminput in;
-        in.offset = drawpos;
-        this->clear(bgcolor);
-        return this->draw(in);
-    }
-};
+    guiteminput in;
+    in.offset = drawpos;
+    this->clear(bgcolor);
+    return this->draw(in);
+}
 
 const short labelymargin = 4;
 //just displays text
-class label : public guitem
+label::label(String mtext)
 {
-public:
-    String text = "";
-    short color = RED;
-    short textsize = 3;
-    short prevlen = 0;
+    text = mtext;
+}
 
-    label(String mtext)
-    {
-        text = mtext;
-    }
+guitemreturn label::draw_specific(guiteminput in)
+{
 
-    guitemreturn draw_specific(guiteminput in) override
-    {
+    tft.setTextSize(textsize);
+    tft.setTextColor(color);
+    tft.setCursor(in.offset.x, in.offset.y + labelymargin);
+    tft.print(text);
 
-        tft.setTextSize(textsize);
-        tft.setTextColor(color);
-        tft.setCursor(in.offset.x, in.offset.y + labelymargin);
-        tft.print(text);
+    prevlen = text.length();
+    guitemreturn out;
+    out.offset = in.offset;
+    out.offset.x += prevlen * textsize * 6;
+    out.offset.y += textsize * 8 + labelymargin;
+    return out;
+}
 
-        prevlen = text.length();
-        guitemreturn out;
-        out.offset = in.offset;
-        out.offset.x += prevlen * textsize * 6;
-        out.offset.y += textsize * 8 + labelymargin;
-        return out;
-    }
-
-    void clear(unsigned short color) const override
-    {
-        tft.fillRect(drawpos.x, drawpos.y + labelymargin, prevlen * textsize * 6, textsize * 8, color);
-    }
-};
+void label::clear(unsigned short color)
+{
+    tft.fillRect(drawpos.x, drawpos.y + labelymargin, prevlen * textsize * 6, textsize * 8, incol);
+}
 
 short boxmargin = 4;
 short boxpadding = 4;
-class input : public guitem
+
+input::input()
 {
-public:
-    short minwidth = 50;
-    short width = minwidth;
+    isinput = true;
+}
 
-    String text = "";
-    short color = RED;
-    short textsize = 3;
-    short prevlen = 0;
+void input::addchar(char in)
+{
+    text += in;
+    width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
 
-    input()
+    collumn *tparent = static_cast<collumn *>(this->parent);
+    if (tparent == nullptr)
     {
-        isinput = true;
+        this->update();
+        return;
+    }
+    tparent->clear();
+    tparent->draw();
+}
+
+guitemreturn input::draw_specific(guiteminput in) 
+{
+    in.offset.y += boxmargin;
+    tft.setTextSize(textsize);
+    tft.setTextColor(color);
+    tft.setCursor(in.offset.x + boxpadding, in.offset.y + boxpadding);
+    tft.print(text);
+
+    this->select(inputboxcolor);
+
+    prevlen = text.length();
+
+    guitemreturn out;
+    out.offset = in.offset;
+    out.offset.x += width;
+    out.offset.y += textsize * 8 + 2 * boxpadding;
+    return out;
+}
+
+void input::clear(unsigned short color)
+{
+    tft.fillRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, color);
+}
+
+void input::select(short boxcolor)
+{
+    if (minwidth > width)
+    {
+        width = minwidth;
     }
 
-    void addchar(char in)
-    {
-        text += in;
-        width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
-        
-        collumn* tparent = static_cast<collumn*>(this->parent);
-        if(tparent == nullptr){
-            this->update();
-            return;
-        }
-        tparent->clear();
-        tparent->draw();
-    }
+    tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, boxcolor);
+}
 
-    guitemreturn draw_specific(guiteminput in) override
-    {
-        in.offset.y += boxmargin;
-        tft.setTextSize(textsize);
-        tft.setTextColor(color);
-        tft.setCursor(in.offset.x + boxpadding, in.offset.y + boxpadding);
-        tft.print(text);
-
-        this->select(inputboxcolor);
-
-        prevlen = text.length();
-
-        guitemreturn out;
-        out.offset = in.offset;
-        out.offset.x += width;
-        out.offset.y += textsize * 8 + 2 * boxpadding;
-        return out;
-    }
-
-    void clear(unsigned short color) const override
-    {
-        tft.fillRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, color);
-    }
-
-    void select(short boxcolor)
-    {
-        if (minwidth > width)
-        {
-            width = minwidth;
-        }
-
-        tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, boxcolor);
-    }
-
-    void deselect(short bgcolor)
-    {
-        tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, inputboxcolor);
-    }
-};
+void input::deselect(short bgcolor)
+{
+    tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, inputboxcolor);
+}
 
 //collumns for drawing guitems horizontally
 const short colmarginy = 4; //spacing between collumns
-class collumn : public guitem
+
+collumn::collumn(guitem **mitems, unsigned int milen)
 {
-public:
-    guitem **items;
-    unsigned int ilen;
+    items = mitems;
+    ilen = milen;
+    iscol = true;
 
-    int selindex = -1; //which index of the items is selected
-    input *selitem = nullptr;
-
-    collumn(guitem **mitems, unsigned int milen)
+    for (int i = 0; i < ilen; i++)
     {
-        items = mitems;
-        ilen = milen;
-        iscol = true;
+        items[i]->parent = this;
+    }
+}
 
-        for (int i = 0; i < ilen; i++)
-        {
-            items[i]->parent = this;
-        }
+guitemreturn collumn::draw_specific(guiteminput in) 
+{
+    guitemreturn out;
+    int maxoffy = 0;
+    guiteminput newin;
+    newin.offset = in.offset;
+    Serial.print("newin: ");
+    Serial.println(newin.offset.x);
+    for (int i = 0; i < ilen; i++)
+    {
+        out = items[i]->draw(newin);
+        newin.offset.x = out.offset.x + colmarginy;
+        maxoffy = max(maxoffy, out.offset.y);
+    }
+    out.offset = in.offset;
+    out.offset.y = maxoffy;
+
+    return out;
+}
+
+input *collumn::newselect(bool mode)
+{
+    int startindex = 0;
+    if (selindex != -1)
+    {
+        startindex = selindex + 1;
     }
 
-    guitemreturn draw_specific(guiteminput in) override
+    if (mode == renewsel)
     {
-        guitemreturn out;
-        int maxoffy = 0;
-        guiteminput newin;
-        newin.offset = in.offset;
-        Serial.print("newin: ");
-        Serial.println(newin.offset.x);
-        for (int i = 0; i < ilen; i++)
-        {
-            out = items[i]->draw(newin);
-            newin.offset.x = out.offset.x + colmarginy;
-            maxoffy = max(maxoffy, out.offset.y);
-        }
-        out.offset = in.offset;
-        out.offset.y = maxoffy;
-
-        return out;
+        startindex = 0;
     }
 
-    input *newselect(bool mode)
+    if (startindex >= ilen)
     {
-        int startindex = 0;
-        if (selindex != -1)
-        {
-            startindex = selindex + 1;
-        }
-
-        if (mode == renewsel)
-        {
-            startindex = 0;
-        }
-
-        if (startindex >= ilen)
-        {
-            return nullptr;
-        }
-
-        for (int i = startindex; i < ilen; i++)
-        {
-            if (items[i]->isinput)
-            {
-                if (selitem != nullptr)
-                {
-                    selitem->deselect(bgcolor);
-                }
-
-                selitem = static_cast<input *>(items[i]);
-                selitem->select(inputselcolor);
-
-                selindex = i;
-                return selitem;
-            }
-        }
-
-        selindex = -1;
-        selitem = nullptr;
         return nullptr;
     }
 
-    void clear(unsigned short color) const override {
-        for(int i = 0; i < ilen; i++){
-            items[i]->clear();
+    for (int i = startindex; i < ilen; i++)
+    {
+        if (items[i]->isinput)
+        {
+            if (selitem != nullptr)
+            {
+                selitem->deselect(bgcolor);
+            }
+
+            selitem = static_cast<input *>(items[i]);
+            selitem->select(inputselcolor);
+
+            selindex = i;
+            return selitem;
         }
     }
-};
+
+    selindex = -1;
+    selitem = nullptr;
+    return nullptr;
+}
+
+void collumn::clear(unsigned short color)
+{
+    for (int i = 0; i < ilen; i++)
+    {
+        items[i]->clear();
+    }
+}
 
 //manager for drawing gui items to the screen
-class gui
+
+gui(guitem **mitems, unsigned int milen)
 {
-public:
-    guitem **items;
-    unsigned int ilen;
+    items = mitems;
+    ilen = milen;
+}
 
-    int selindex = -1; //which index of the items is selected
-    input *selitem = nullptr;
-
-    gui(guitem **mitems, unsigned int milen)
+void draw()
+{
+    guitemreturn out;
+    guiteminput in;
+    in.offset.x = 10;
+    for (int i = 0; i < ilen; i++)
     {
-        items = mitems;
-        ilen = milen;
+        in.offset.y = out.offset.y;
+        out = items[i]->draw(in);
+    }
+}
+
+input *newselect()
+{
+    if (selitem != nullptr)
+    {
+        selitem->deselect(inputboxcolor);
     }
 
-    void draw()
+    int startindex = 0;
+    if (selindex != -1)
     {
-        guitemreturn out;
-        guiteminput in;
-        in.offset.x = 10;
-        for (int i = 0; i < ilen; i++)
-        {
-            in.offset.y = out.offset.y;
-            out = items[i]->draw(in);
-        }
-    }
+        startindex = selindex + 1;
 
-    input *newselect()
-    {
-        if (selitem != nullptr)
+        if (items[selindex]->iscol)
         {
-            selitem->deselect(inputboxcolor);
-        }
-
-        int startindex = 0;
-        if (selindex != -1)
-        {
-            startindex = selindex + 1;
-
-            if (items[selindex]->iscol)
+            collumn *coltest = static_cast<collumn *>(items[selindex]);
+            input *colsel = coltest->newselect(nextsel);
+            if (colsel != nullptr)
             {
-                collumn *coltest = static_cast<collumn *>(items[selindex]);
-                input *colsel = coltest->newselect(nextsel);
-                if (colsel != nullptr)
-                {
-                    selitem = colsel;
-                    return selitem;
-                }
-            }
-        }
-
-        if (startindex >= ilen)
-        {
-            selindex = -1;
-            selitem = nullptr;
-            return nullptr;
-        }
-
-        Serial.print("startindex: ");
-        Serial.println(startindex);
-
-        for (int i = startindex; i < ilen; i++)
-        {
-            if (items[i]->isinput)
-            {
-
-                selitem = static_cast<input *>(items[i]);
-                selitem->select(inputselcolor);
-
-                selindex = i;
+                selitem = colsel;
                 return selitem;
             }
-            else if (items[i]->iscol)
-            {
-                if (selitem != nullptr)
-                {
-                    selitem->deselect(inputboxcolor);
-                }
-
-                collumn *coltest = static_cast<collumn *>(items[i]);
-                input *colsel = coltest->newselect(renewsel);
-                if (colsel != nullptr)
-                {
-                    selitem = colsel;
-                    selindex = i;
-                    return colsel;
-                }
-            }
         }
+    }
 
+    if (startindex >= ilen)
+    {
         selindex = -1;
         selitem = nullptr;
         return nullptr;
     }
-};
+
+    Serial.print("startindex: ");
+    Serial.println(startindex);
+
+    for (int i = startindex; i < ilen; i++)
+    {
+        if (items[i]->isinput)
+        {
+
+            selitem = static_cast<input *>(items[i]);
+            selitem->select(inputselcolor);
+
+            selindex = i;
+            return selitem;
+        }
+        else if (items[i]->iscol)
+        {
+            if (selitem != nullptr)
+            {
+                selitem->deselect(inputboxcolor);
+            }
+
+            collumn *coltest = static_cast<collumn *>(items[i]);
+            input *colsel = coltest->newselect(renewsel);
+            if (colsel != nullptr)
+            {
+                selitem = colsel;
+                selindex = i;
+                return colsel;
+            }
+        }
+    }
+
+    selindex = -1;
+    selitem = nullptr;
+    return nullptr;
+}
