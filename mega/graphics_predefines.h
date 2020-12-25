@@ -21,7 +21,7 @@ public:
     vec transform;
     bool isinput = false;
     bool iscol = false;
-    guitem* parent = nullptr; //this is actually a pointer to a collumn
+    guitem *parent = nullptr; //this is actually a pointer to a collumn
 
     //virtual function for drawing the types of items
     virtual guitemreturn draw_specific(guiteminput in){};
@@ -29,7 +29,6 @@ public:
 
     guitemreturn draw(guiteminput in);
     guitemreturn update();
-
 };
 
 //just displays text
@@ -47,6 +46,7 @@ public:
     void clear(unsigned short incol) const override;
 };
 
+//TODO: make input have label built in to save ram
 class input : public guitem
 {
 public:
@@ -76,8 +76,8 @@ public:
     int selindex = -1; //which index of the items is selected
     input *selitem = nullptr;
 
-    collumn(guitem** mitems, unsigned int milen);
-    input* newselect(bool mode);
+    collumn(guitem **mitems, unsigned int milen);
+    input *newselect(bool mode);
 
     guitemreturn draw_specific(guiteminput in) override;
     void clear(unsigned short color) const override;
@@ -92,7 +92,7 @@ public:
     int selindex = -1; //which index of the items is selected
     input *selitem = nullptr;
 
-    gui(guitem** mitems, unsigned int milen);
+    gui(guitem **mitems, unsigned int milen);
     void draw();
-    input* newselect();
+    input *newselect();
 };

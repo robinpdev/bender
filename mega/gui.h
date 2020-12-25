@@ -2,8 +2,17 @@
 
 #include "graphics_predefines.h"
 
+//helper defines
+#define nitems(name) guitem* name[] = 
+#define newcol(name, inarr) collumn name (inarr , sizeof(inarr) / 2)
+#define newgui(name, inarr) gui name (inarr, sizeof(inarr) / 2)
+#define whenselected(guio, element) if(guio.selitem == &element)
+
+//internal helper defines
 #define renewsel true
 #define nextsel false
+
+bool inputmodified = false;
 
 //common draw function that calls the specific draw function for all types of items
 guitemreturn guitem::draw(guiteminput in)
@@ -59,8 +68,8 @@ void label::clear(unsigned short incol) const
     tft.fillRect(drawpos.x, drawpos.y + labelymargin, prevlen * textsize * 6, textsize * 8, incol);
 }
 
-short boxmargin = 4;
-short boxpadding = 4;
+const short boxmargin = 4;
+const short boxpadding = 4;
 
 input::input()
 {
@@ -69,9 +78,11 @@ input::input()
 
 void input::addchar(char in)
 {
+    inputmodified = true;
     text += in;
     width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
     this->update();
+    this->select(inputselcolor);
 }
 
 guitemreturn input::draw_specific(guiteminput in)

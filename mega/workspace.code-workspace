@@ -10,5 +10,7 @@
 			"path": "..\\old"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"todo-tree.tree.showBadges": true
+	}
 }
