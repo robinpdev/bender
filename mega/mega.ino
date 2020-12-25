@@ -1,7 +1,7 @@
 #include "graphics.h"
 #include "keypad.h"
 
-const short bgcolor = BLUE;
+const short bgcolor = WHITE;
 const short inputboxcolor = GREEN;
 const short inputselcolor = RED;
 
@@ -33,6 +33,8 @@ void setup(){
   tft.setRotation(5);
   tft.fillScreen(WHITE);
 
+  i2.transform.x += 100;
+
   guim.draw();
 }
 
@@ -41,7 +43,7 @@ void loop()
   char readkey = keypad.getKey();
   if (readkey == 'D'){
     guim.newselect();
-  }else if(isdigit(readkey)){
+  }else if(isdigit(readkey) && readkey != 0){
     if(guim.selitem != nullptr){
       guim.selitem->addchar(readkey);
     }

@@ -11,7 +11,7 @@ guitemreturn guitem::draw(guiteminput in)
     in.offset.x += transform.x;
     in.offset.y += transform.y;
     drawpos = in.offset;
-    this->clear(bgcolor);
+    //this->clear(bgcolor);
     return this->draw_specific(in);
 }
 
@@ -21,6 +21,13 @@ guitemreturn guitem::update()
     guiteminput in;
     in.offset = drawpos;
     this->clear(bgcolor);
+
+    if (this->parent != nullptr)
+    {
+        collumn *tparent = static_cast<collumn *>(this->parent);
+        return tparent->update();
+    }
+
     return this->draw(in);
 }
 
@@ -47,7 +54,7 @@ guitemreturn label::draw_specific(guiteminput in)
     return out;
 }
 
-void label::clear(unsigned short color)
+void label::clear(unsigned short incol) const
 {
     tft.fillRect(drawpos.x, drawpos.y + labelymargin, prevlen * textsize * 6, textsize * 8, incol);
 }
@@ -64,18 +71,10 @@ void input::addchar(char in)
 {
     text += in;
     width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
-
-    collumn *tparent = static_cast<collumn *>(this->parent);
-    if (tparent == nullptr)
-    {
-        this->update();
-        return;
-    }
-    tparent->clear();
-    tparent->draw();
+    this->update();
 }
 
-guitemreturn input::draw_specific(guiteminput in) 
+guitemreturn input::draw_specific(guiteminput in)
 {
     in.offset.y += boxmargin;
     tft.setTextSize(textsize);
@@ -94,7 +93,7 @@ guitemreturn input::draw_specific(guiteminput in)
     return out;
 }
 
-void input::clear(unsigned short color)
+void input::clear(unsigned short color) const
 {
     tft.fillRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, color);
 }
@@ -109,7 +108,7 @@ void input::select(short boxcolor)
     tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, boxcolor);
 }
 
-void input::deselect(short bgcolor)
+void input::deselect(unsigned short bgcolor)
 {
     tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, inputboxcolor);
 }
@@ -129,14 +128,13 @@ collumn::collumn(guitem **mitems, unsigned int milen)
     }
 }
 
-guitemreturn collumn::draw_specific(guiteminput in) 
+guitemreturn collumn::draw_specific(guiteminput in)
 {
     guitemreturn out;
     int maxoffy = 0;
     guiteminput newin;
     newin.offset = in.offset;
-    Serial.print("newin: ");
-    Serial.println(newin.offset.x);
+
     for (int i = 0; i < ilen; i++)
     {
         out = items[i]->draw(newin);
@@ -189,23 +187,23 @@ input *collumn::newselect(bool mode)
     return nullptr;
 }
 
-void collumn::clear(unsigned short color)
+void collumn::clear(unsigned short color) const
 {
     for (int i = 0; i < ilen; i++)
     {
-        items[i]->clear();
+        items[i]->clear(bgcolor);
     }
 }
 
 //manager for drawing gui items to the screen
 
-gui(guitem **mitems, unsigned int milen)
+gui::gui(guitem **mitems, unsigned int milen)
 {
     items = mitems;
     ilen = milen;
 }
 
-void draw()
+void gui::draw()
 {
     guitemreturn out;
     guiteminput in;
@@ -217,7 +215,7 @@ void draw()
     }
 }
 
-input *newselect()
+input *gui::newselect()
 {
     if (selitem != nullptr)
     {
@@ -248,14 +246,10 @@ input *newselect()
         return nullptr;
     }
 
-    Serial.print("startindex: ");
-    Serial.println(startindex);
-
     for (int i = startindex; i < ilen; i++)
     {
         if (items[i]->isinput)
         {
-
             selitem = static_cast<input *>(items[i]);
             selitem->select(inputselcolor);
 

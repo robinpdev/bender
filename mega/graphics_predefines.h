@@ -21,7 +21,7 @@ public:
     vec transform;
     bool isinput = false;
     bool iscol = false;
-    bool* parent = nullptr; //this is actually a pointer to a collumn
+    guitem* parent = nullptr; //this is actually a pointer to a collumn
 
     //virtual function for drawing the types of items
     virtual guitemreturn draw_specific(guiteminput in){};
@@ -44,7 +44,7 @@ public:
     label(String mtext);
 
     guitemreturn draw_specific(guiteminput in) override;
-    void clear(unsigned short) const override;
+    void clear(unsigned short incol) const override;
 };
 
 class input : public guitem
@@ -61,7 +61,7 @@ public:
     input();
     void addchar(char in);
     void select(short boxolor);
-    void deselect();
+    void deselect(unsigned short bgcolor);
 
     guitemreturn draw_specific(guiteminput in) override;
     void clear(unsigned short color) const override;
