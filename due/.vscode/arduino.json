@@ -1,0 +1,6 @@
+{
+    "sketch": "due.ino",
+    "board": "arduino:sam:arduino_due_x_dbg",
+    "output": "../duebuild",
+    "port": "COM4"
+}

@@ -56,11 +56,11 @@ bool comp = false;  //status compensatie --AFBLIJVEN--
 //pins voor knoppen
 const int bup = 7;
 const int bdown = 6;
-boolean bcon = false; //master status knopcontrole
+bool bcon = false; //master status knopcontrole
 //status controle aparte knoppen
-boolean bupon = true;
-boolean bdownon = true;
-boolean econtrol = true; //check als de 2 encoders geinitialiseerd zijn
+bool bupon = true;
+bool bdownon = true;
+bool econtrol = true; //check als de 2 encoders geinitialiseerd zijn
 
 const int buzpin = 4; //pin buzzer
 
@@ -111,7 +111,9 @@ void setup() { // dit stuk code wordt eens uitgevoerd wanneer de arduino is opge
   //analogWrite(11, 100);
 
   Serial.begin(115200); // start de seriële communicatie op een snelheid van 115200 bits per seconde.
+  Serial.println("startup");
   Serial3.begin(115200);
+
   for(int i = 13; i < 10; i++){
     pinMode(i, OUTPUT);   
   }
@@ -132,6 +134,7 @@ void setup() { // dit stuk code wordt eens uitgevoerd wanneer de arduino is opge
   sendint('u', (int)mspeedi);
   sendint('l', (int)minspeedi);
 
+  
 }
 
 void loop() {

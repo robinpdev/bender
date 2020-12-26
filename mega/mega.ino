@@ -7,6 +7,8 @@ const short bgcolor = WHITE;
 const short inputboxcolor = GREEN;
 const short inputselcolor = RED;
 
+#define cp Serial1 //current communication port
+#include "communication.h"
 #include "gui.h"
 
 //****************TAB1**********************//
@@ -95,6 +97,10 @@ void setup()
   tft.fillScreen(WHITE);
 
   drawtab();
+
+  send('a', 't');
+  send('b', 12345);
+  Serial.println("sent");
 }
 
 void loop()
@@ -135,6 +141,8 @@ void loop()
       cgui->selitem->addchar(readkey);
     }
   }
+
+  updatepackets();
   delay(5);
 }
 

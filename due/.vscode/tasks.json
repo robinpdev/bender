@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "clearOutput",
+            "command": "${command:workbench.output.action.clearOutput}"
+        },
+        {
+            "label": "ArduinoUpload",
+            "command": "${command:arduino.upload}"
+        },
+        {
+            "label": "Arduino-build-routine",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "clearOutput",
+                "ArduinoUpload"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

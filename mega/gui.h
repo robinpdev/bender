@@ -1,6 +1,6 @@
 #include "graphics.h"
 
-#include "graphics_predefines.h"
+#include "gui_predefines.h"
 
 //helper defines
 #define nitems(name) guitem* name[] = 
