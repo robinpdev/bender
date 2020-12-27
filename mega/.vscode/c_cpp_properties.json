@@ -8,7 +8,8 @@
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
                 "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**"
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**",
+                "D:\\Users\\Mario Paret\\Desktop\\1-coding-projects\\bender-plooibank\\bender\\libraries\\metacom\\**"
             ],
             "forcedInclude": [
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
@@ -33,7 +34,8 @@
                     "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
                     "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
                     "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**",
-                    "${workspaceFolder}"
+                    "D:\\Users\\Mario Paret\\Desktop\\1-coding-projects\\bender-plooibank\\bender\\libraries\\**",
+                    "${workspacefolder}"
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }

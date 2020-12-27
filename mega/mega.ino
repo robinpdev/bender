@@ -3,12 +3,13 @@
 
 #define tarr(...) __VA_ARGS__ 
 
+#define cp Serial1 //current communication port
+void handlepackets(char var, String returned);
+#include "metacom.h"
+
 const short bgcolor = WHITE;
 const short inputboxcolor = GREEN;
 const short inputselcolor = RED;
-
-#define cp Serial1 //current communication port
-#include "communication.h"
 #include "gui.h"
 
 //****************TAB1**********************//
@@ -231,3 +232,6 @@ void showencpos()
         tft.fillRect(405, 50 + h2, 30, 10, RED);
     }
 }
+
+//no more declaring global variables after this point!
+#include "communication.h"

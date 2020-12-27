@@ -9,12 +9,10 @@
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
                 "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**",
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\**",
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**"
+                "D:\\Users\\Mario Paret\\Desktop\\1 coding projects\\bender-plooibank\\**"
             ],
             "forcedInclude": [
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h",
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\cores\\arduino\\Arduino.h"
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
             ],
             "defines": [
                 "USBCON"
@@ -36,6 +34,7 @@
                     "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
                     "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
                     "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**",
+                    "D:\\Users\\Mario Paret\\Desktop\\1 coding projects\\bender-plooibank\\**",
                     "${workspaceFolder}"
                 ],
                 "limitSymbolsToIncludedHeaders": true
@@ -74,6 +73,8 @@
         {
             "name": "Win32",
             "includePath": [
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\**",
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\tools\\**",
                 "D:\\Users\\Mario Paret\\Documents\\Arduino\\libraries\\**",
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
