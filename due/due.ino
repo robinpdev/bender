@@ -1,8 +1,20 @@
+#include <arduino.h>
+
+#define pinon(pin) digitalRead(pin)
+
+#define startup 's'
+#define vmotorcontrol 'm'
+#define apos 'a'
+#define bpos 'b'
+
 #include "util.h"
 #define cp Serial3 //current communication port
 #include "metacom.h"
-
 #include "encoder.h"
+#include "motor.h"
+
+const short bup = 7, bdown = 6;
+bool bupstate = false, bdownstate = false;
 
 void setup()
 {
@@ -15,27 +27,65 @@ void setup()
     Serial3.begin(115200);
     Serial3.write('s');
 
-    enc1_start();
-    enc2_start();
+    enca_start();
+    encb_start();
 
-    send('a', 't');
-    send('b', 12345);
+    send(startup);
 }
 
-void loop(){
+void loop()
+{
+    while (true)
+    {
+        if (pinon(bup) == HIGH && !bupstate)
+        {
+            bupstate = true;
+            motorforward();
+        }
+        else if (pinon(bdown) == HIGH && !bdownstate)
+        {
+            bdownstate = true;
+            motorback();
+        }
+        else if ((bupstate || bdownstate) && pinon(bdown) == LOW && pinon(bup) == LOW)
+        {
+            bupstate = false;
+            bdownstate = false;
+            motorstop();
+        }
 
-    if(enc1.pos != enc1_prevpos){
-        Serial.print("encoder 1: ");
-        Serial.println(enc1.pos);
-        enc1_prevpos = enc1.pos;
+        if(enca.gotref && encb.gotref){
+            motorstop();
+            break;
+        }
+        updatepackets();
+        delay(5);
     }
 
-    delay(5);
-    updatepackets();
+    Serial.println("got the refsss");
+
+    while(true){
+        if (enca.pos != enca.prevpos)
+        {
+            detachInterrupt(digitalPinToInterrupt(enca.chr));
+            Serial.print("encoder 1: ");
+            Serial.println(enca.pos);
+            send(apos, enca.pos);
+            enca.prevpos = enca.pos;
+        }
+
+        if (encb.pos != encb.prevpos)
+        {
+            detachInterrupt(digitalPinToInterrupt(encb.chr));
+            Serial.print("encoder 2: ");
+            Serial.println(encb.pos);
+            encb.prevpos = encb.pos;
+        }
+    }
+
+    delay(5000);
+    
 }
-
-
-
 
 //no more global variable definitions from this point!
 #include "communication.h"

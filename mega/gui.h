@@ -68,6 +68,11 @@ void label::clear(unsigned short incol) const
     tft.fillRect(drawpos.x, drawpos.y + labelymargin, prevlen * textsize * 6, textsize * 8, incol);
 }
 
+void label::tupdate(String ntext){
+    text = ntext;
+    update();
+}
+
 const short boxmargin = 4;
 const short boxpadding = 4;
 

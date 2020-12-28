@@ -4,7 +4,10 @@
 #define tarr(...) __VA_ARGS__ 
 
 #define cp Serial1 //current communication port
-void handlepackets(char var, String returned);
+
+#define vmotorcontrol 'm'
+#define apos 'a'
+
 #include "metacom.h"
 
 const short bgcolor = WHITE;
@@ -69,6 +72,12 @@ label doell("doel: ");
 input doeli;
 label deltal("delta: ");
 input deltai;
+label lcontrol("beide motors");
+#define geen 'o'
+#define beide 'c'
+#define controla 'a'
+#define controlb 'b'
+char motorcontrol = beide;
 
 nitems(icol31){&doell, &doeli};
 newcol(col31, icol31);
@@ -76,7 +85,7 @@ newcol(col31, icol31);
 nitems(icol32){&deltal, &deltai};
 newcol(col32, icol32);
 
-nitems(items3){&col31, &col32};
+nitems(items3){&col31, &col32, &lcontrol};
 newgui(guim3, items3);
 
 gui* guis[] = {&guim1, &guim2, &guim3};
@@ -102,6 +111,8 @@ void setup()
   send('a', 't');
   send('b', 12345);
   Serial.println("sent");
+
+  
 }
 
 void loop()
@@ -134,6 +145,12 @@ void loop()
     inputmodified = false;
   }else if(readkey == 'A'){
     nextab();
+  }else if(readkey == 'B' && tabindex == 3 && cgui->selitem == nullptr){
+    if(motorcontrol == beide){ motorcontrol = controla; lcontrol.tupdate("motor A"); }
+    else if(motorcontrol == controla){ motorcontrol = controlb; lcontrol.tupdate("motor B"); }
+    else if(motorcontrol == controlb){ motorcontrol = beide; lcontrol.tupdate("beide motors"); }
+
+    send(vmotorcontrol, motorcontrol);
   }
   else if (isdigit(readkey) && readkey != 0)
   {

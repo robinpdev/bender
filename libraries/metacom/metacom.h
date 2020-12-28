@@ -1,5 +1,6 @@
 //metacom is a header library for communication between serial ports on 2 arduinos
 //the main use of this is transferring variables form 1 board to another
+#include <arduino.h>
 
 void handlepacket(char var, String returned);
 
@@ -39,6 +40,12 @@ void send(char var, T input){
     cp.write(var);
     cp.print(input);
     cp.write('#');
+}
+
+void send(char var){
+  cp.write('!');
+  cp.write(var);
+  cp.write('#');
 }
 
 void updatepackets(){

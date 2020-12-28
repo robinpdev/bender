@@ -1,66 +1,74 @@
-
-encoder enc1{0, 22, 28, 30, false};
-encoder enc2{0, 24, 26, 32, false};
-
-int enc1_prevpos = 0;
-int enc2_prevpos = 0;
-
-void enc1_gotcha()
-{
-    if (digitalRead(enc1.cha) && digitalRead(enc1.chb0))
-    {
-        enc1.pos--;
-    }
-    else if (digitalRead(enc1.cha1) && !digitalRead(enc1.chb1))
-    {
-        enc1.pos++;
-    }
-}
-
-void enc1_refreceived()
-{
-    enc1.gotref = true;
-    attachInterrupt(digitalPinToInterrupt(enc1.cha), enc1_gotcha, RISING);
-}
-
-void enc1_start()
-{
-    pinMode(enc1.cha, INPUT);
-    pinMode(enc1.chb, INPUT);
-    pinMode(enc1.chr, INPUT);
-    attachInterrupt(digitalPinToInterrupt(enc1.chr), enc1_refreceived, RISING);
-}
-
-void enc2_gotcha()
-{
-    if (digitalRead(enc2.cha) && digitalRead(enc2.chb0))
-    {
-        enc2.pos--;
-    }
-    else if (digitalRead(enc2.cha1) && !digitalRead(enc2.chb1))
-    {
-        enc2.pos++;
-    }
-}
-
-void enc2_refreceived()
-{
-    enc2.gotref = true;
-    attachInterrupt(digitalPinToInterrupt(enc2.cha), enc2_gotcha, RISING);
-}
-
-void enc2_start(void refreceived(), void mgotcha(), void mgotchb())
-{
-    pinMode(enc2.cha, INPUT);
-    pinMode(enc2.chb, INPUT);
-    pinMode(enc2.chr, INPUT);
-    attachInterrupt(digitalPinToInterrupt(enc2.chr), enc2.refreceived, RISING);
-}
-
-struct encoder
+class encoder
 {
 public:
     volatile int pos = 0;
-    const short cha, chb, chr;
+    volatile int prevpos = 0;
+    short cha, chb, chr;
     volatile bool gotref = false;
+
+    encoder(short mcha, short mchb, short mchr)
+    {
+        cha = mcha;
+        chb = mchb;
+        chr = mchr;
+    }
 };
+
+encoder enca(22, 28, 30);
+encoder encb(24, 26, 32);
+
+void enc1_gotcha()
+{
+    if (digitalRead(enca.cha) && digitalRead(enca.chb))
+    {
+        enca.pos--;
+    }
+    else if (digitalRead(enca.cha) && !digitalRead(enca.chb))
+    {
+        enca.pos++;
+    }
+}
+
+void enca_refreceived()
+{
+    enca.gotref = true;
+    attachInterrupt(digitalPinToInterrupt(enca.cha), enc1_gotcha, RISING);
+    detachInterrupt(digitalPinToInterrupt(enca.chr));
+}
+
+void enca_start()
+{
+    Serial.println("started enc1");
+    pinMode(enca.cha, INPUT);
+    pinMode(enca.chb, INPUT);
+    pinMode(enca.chr, INPUT);
+    attachInterrupt(digitalPinToInterrupt(enca.chr), enca_refreceived, RISING);
+}
+
+void encb_gotcha()
+{
+    if (digitalRead(encb.cha) && digitalRead(encb.chb))
+    {
+        encb.pos--;
+    }
+    else if (digitalRead(encb.cha) && !digitalRead(encb.chb))
+    {
+        encb.pos++;
+    }
+}
+
+void encb_refreceived()
+{
+    encb.gotref = true;
+    attachInterrupt(digitalPinToInterrupt(encb.cha), encb_gotcha, RISING);
+    detachInterrupt(digitalPinToInterrupt(encb.chr));
+}
+
+void encb_start()
+{
+    Serial.println("started enc2");
+    pinMode(encb.cha, INPUT);
+    pinMode(encb.chb, INPUT);
+    pinMode(encb.chr, INPUT);
+    attachInterrupt(digitalPinToInterrupt(encb.chr), encb_refreceived, RISING);
+}

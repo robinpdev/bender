@@ -44,6 +44,7 @@ public:
 
     guitemreturn draw_specific(guiteminput in) override;
     void clear(unsigned short incol) const override;
+    void tupdate(String ntext);
 };
 
 //TODO: make input have label built in to save ram
