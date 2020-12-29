@@ -1,21 +1,14 @@
 {
     "configurations": [
         {
-            "name": "ArdCPP",
+            "name": "Win32",
             "includePath": [
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\tools\\**",
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
                 "D:\\Users\\Mario Paret\\Documents\\Arduino\\libraries\\**",
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
-                "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**",
-                "D:\\Users\\Mario Paret\\Desktop\\1-coding-projects\\bender-plooibank\\bender\\libraries\\metacom\\**",
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\**",
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
-                "${workspacefolder}"
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\**"
             ],
             "forcedInclude": [
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h",
                 "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\cores\\arduino\\Arduino.h"
             ],
             "defines": [
@@ -24,73 +17,7 @@
             "intelliSenseMode": "msvc-x64",
             "compilerPath": "D:/vstudio/testapp/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
             "cStandard": "c17",
-            "cppStandard": "c++17",
-            "compilerArgs": [],
-            "intelliSenseModeIsExplicit": true,
-            "cStandardIsExplicit": true,
-            "cppStandardIsExplicit": true,
-            "compilerPathIsExplicit": true,
-            "browse": {
-                "path": [
-                    "D:\\Users\\Mario Paret\\programma's\\arduino\\tools\\**",
-                    "D:\\Users\\Mario Paret\\Documents\\Arduino\\libraries\\**",
-                    "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
-                    "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
-                    "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
-                    "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**",
-                    "D:\\Users\\Mario Paret\\Desktop\\1-coding-projects\\bender-plooibank\\bender\\libraries\\**",
-                    "${workspacefolder}"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
-        },
-        {
-            "name": "dontmindme",
-            "includePath": [
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\tools\\**",
-                "D:\\Users\\Mario Paret\\Documents\\Arduino\\libraries\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
-                "D:\\Users\\Mario Paret\\Documents\\arduino\\libraries\\gfxmaslibrar\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**"
-            ],
-            "defines": [
-                "USBCON"
-            ],
-            "windowsSdkVersion": "10.0.18362.0",
-            "compilerPath": "D:/vstudio/testapp/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "msvc-x64",
-            "compilerArgs": [],
-            "intelliSenseModeIsExplicit": true,
-            "cStandardIsExplicit": true,
-            "cppStandardIsExplicit": true,
-            "compilerPathIsExplicit": true,
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/**"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
-        },
-        {
-            "name": "Win32",
-            "includePath": [
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\tools\\**",
-                "D:\\Users\\Mario Paret\\Documents\\Arduino\\libraries\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\tools\\**",
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**"
-            ],
-            "forcedInclude": [
-                "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
-            ],
-            "defines": [
-                "USBCON"
-            ]
+            "cppStandard": "c++17"
         }
     ],
     "version": 4

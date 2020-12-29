@@ -27,7 +27,7 @@ bool bupstate = false, bdownstate = false;
 
 int dikte = -1;
 int diepte = -1;
-int hoogte = 60;
+int hoogte = 1000;
 int mes = 32;
 int maxspd = 64, minspd = 40;
 short maxdif = 100 - maxspd; //NIET AANKOMEN
@@ -94,6 +94,9 @@ void loop()
         delay(20);
     }
 
+    int doel = hoogte - diepte + dikte + mes;
+    Serial.print("doel: ");
+    Serial.println(doel);
     Serial.println("ready to plooi");
     send(vstate, 2);
     beep(26);
@@ -118,12 +121,18 @@ void loop()
             bupstate = true;
             motorupward();
         }
-        if(pinon(bdown) == HIGH && !bdownstate){
-            bdownstate = true;
-            motora.downward(maxspd * 2.55); //van procent naar 0-255
-        }
 
         if(pinon(bdown) == HIGH){
+            bdownstate = true;
+            bdownstate = true;
+            short downspeeda = 0;
+            if(enca.pos - doel > 100){
+                downspeeda = maxspd * 2.55; //van procent naar 0-255
+            }else{
+                downspeeda = 38 * 2.55;
+            }
+            motora.downward(downspeeda);
+            
             //compensation routine
             //posb = posa + dif
             //<-> dif = posb - posa
@@ -136,11 +145,16 @@ void loop()
             }else{
 
             }
-            motorb.downward(maxspd * 2.55 + difspeed * 2.55);
+            motorb.downward(downspeeda + difspeed * 2.55);
             Serial.print("gap: ");
             Serial.println(posdif);
             Serial.print("b speed: ");
             Serial.println(maxspd * 2.55 + difspeed * 2.55);
+        }
+
+        if(enca.pos - doel <= 1){
+            motorstop();
+            break;
         }
 
         if ((bupstate && pinon(bup) == LOW) || (bdownstate && pinon(bdown) == LOW))
@@ -164,14 +178,17 @@ void loop()
             Serial.print("encb: ");
             Serial.println(encb.pos);
         }*/
-
         
-
         updatepackets();
-        delay(5);
+        delay(10);
     }
 
-    delay(5000);
+    beep(648);
+    Serial.println(enca.pos - doel);
+
+    while(true){
+        delay(5000);
+    }
     
 }
 

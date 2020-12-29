@@ -10,7 +10,7 @@ char motorcontrol = beide;
 class motor{
     public:
     short uppin, downpin;
-    unsigned char speed = 255;
+    short speed = 255;
     bool enabled = true;
     char state = 'o';
 
