@@ -1,11 +1,11 @@
 #include "graphics.h"
-
+char tabindex = 1;
 #include "gui_predefines.h"
 
 //helper defines
 #define nitems(name) guitem* name[] = 
 #define newcol(name, inarr) collumn name (inarr , sizeof(inarr) / 2)
-#define newgui(name, inarr) gui name (inarr, sizeof(inarr) / 2)
+#define newgui(name, inarr, index) gui name (inarr, sizeof(inarr) / 2, index)
 #define whenselected(guio, element) if(guio.selitem == &element)
 
 //internal helper defines
@@ -70,7 +70,9 @@ void label::clear(unsigned short incol) const
 
 void label::tupdate(String ntext){
     text = ntext;
-    update();
+    if(tabindex == tab){
+        update();
+    }
 }
 
 const short boxmargin = 4;
@@ -129,6 +131,14 @@ void input::deselect(unsigned short bgcolor)
     tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, inputboxcolor);
 }
 
+void input::tupdate(String ntext){
+    text = ntext;
+    width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
+    if(tabindex == tab){
+        update();
+    }
+}
+
 //collumns for drawing guitems horizontally
 const short colmarginy = 4; //spacing between collumns
 
@@ -153,6 +163,8 @@ guitemreturn collumn::draw_specific(guiteminput in)
 
     for (int i = 0; i < ilen; i++)
     {
+        items[i]->tab = tab; //TODO: search a better solution for this
+
         out = items[i]->draw(newin);
         newin.offset.x = out.offset.x + colmarginy;
         maxoffy = max(maxoffy, out.offset.y);
@@ -213,10 +225,14 @@ void collumn::clear(unsigned short color) const
 
 //manager for drawing gui items to the screen
 
-gui::gui(guitem **mitems, unsigned int milen)
+gui::gui(guitem **mitems, unsigned int milen, char mtab)
 {
     items = mitems;
     ilen = milen;
+    for (int i = 0; i < ilen; i++)
+    {
+        items[i]->tab = mtab;
+    }
 }
 
 void gui::draw()

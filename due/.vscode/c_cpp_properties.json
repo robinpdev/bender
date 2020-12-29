@@ -11,7 +11,8 @@
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\**",
                 "D:\\Users\\Mario Paret\\Desktop\\1-coding-projects\\bender-plooibank\\bender\\libraries\\metacom\\**",
                 "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\**",
-                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**"
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                "${workspacefolder}"
             ],
             "forcedInclude": [
                 "D:\\Users\\Mario Paret\\programma's\\arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h",

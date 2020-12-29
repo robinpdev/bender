@@ -11,3 +11,9 @@ void beep(){
   delay(100);
   digitalWrite(buzpin, LOW);
 }
+
+void beep(short mils){
+  analogWrite(buzpin, 120); 
+  delay(mils);
+  digitalWrite(buzpin, LOW);
+}

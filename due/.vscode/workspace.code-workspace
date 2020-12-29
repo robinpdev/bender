@@ -9,5 +9,11 @@
 		{
 			"path": "..\\..\\libraries"
 		}
-	]
+	],
+	"settings": {
+		"files.associations": {
+			"exception": "cpp",
+			"type_traits": "cpp"
+		}
+	}
 }

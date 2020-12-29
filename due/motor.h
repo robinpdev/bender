@@ -9,71 +9,71 @@ char motorcontrol = beide;
 
 class motor{
     public:
-    short forpin, backpin;
+    short uppin, downpin;
     unsigned char speed = 255;
     bool enabled = true;
     char state = 'o';
 
     motor(short mforpin, short mbackpin){
-        forpin = mforpin;
-        backpin = mbackpin;
-        pinMode(forpin, OUTPUT);
-        pinMode(backpin, OUTPUT);
+        uppin = mforpin;
+        downpin = mbackpin;
+        pinMode(uppin, OUTPUT);
+        pinMode(downpin, OUTPUT);
         stop();
     }
 
-    void forward(){
+    void upward(){
         state = 'f';
-        digitalWrite(backpin, LOW);
-        analogWrite(forpin, speed);
+        digitalWrite(downpin, LOW);
+        analogWrite(uppin, speed);
     }
-    void back(){
+    void downward(){
         state = 'b';
-        digitalWrite(forpin, LOW);
-        analogWrite(backpin, speed);
+        digitalWrite(uppin, LOW);
+        analogWrite(downpin, speed);
     }
     void stop(){
         state = 'o';
-        digitalWrite(forpin, LOW);
-        digitalWrite(backpin, LOW);
+        digitalWrite(uppin, LOW);
+        digitalWrite(downpin, LOW);
     }
 
-    void forward(unsigned char inspeed){
+    void upward(float inspeed){
         state = 'f';
-        digitalWrite(backpin, LOW);
-        analogWrite(forpin, inspeed);
+        digitalWrite(downpin, LOW);
+        analogWrite(uppin, inspeed);
     }
-    void back(unsigned char inspeed){
+    void downward(float inspeed){
         state = 'b';
-        digitalWrite(forpin, LOW);
-        analogWrite(backpin, inspeed);
+        digitalWrite(uppin, LOW);
+        analogWrite(downpin, inspeed);
     }
 };
 
 motor motora(9, 8);
 motor motorb(12, 11);
 
-void motorforward(){
+void motorupward(){
     if(motorcontrol == beide){
         Serial.println("forward");
-        motora.forward();
-        motorb.forward();
+        motora.upward();
+        motorb.upward();
     }else if(motorcontrol == controla){
-        motora.forward();
+        motora.upward();
     }else if (motorcontrol == controlb){
-        motorb.forward();
+        motorb.upward();
     }
 }
 
-void motorback(){
+void motordownward(){
     if(motorcontrol == beide){
         Serial.println("back");
-        motora.back();
-        motorb.back();
+        motora.downward();
+        motorb.downward();
     }else if(motorcontrol == controla){
-        motora.back();
+        motora.downward();
     }else if (motorcontrol == controlb){
-        motorb.back();
+        motorb.downward();
     }
 }
 

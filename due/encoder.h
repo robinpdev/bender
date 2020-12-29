@@ -1,7 +1,7 @@
 class encoder
 {
 public:
-    volatile int pos = 0;
+    volatile int pos = 3000;
     volatile int prevpos = 0;
     short cha, chb, chr;
     volatile bool gotref = false;

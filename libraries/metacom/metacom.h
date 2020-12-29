@@ -64,5 +64,6 @@ void updatepackets(){
         }
 
         handlepacket(var, returned);
+        Serial.println();
     }
 }

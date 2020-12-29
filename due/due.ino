@@ -3,9 +3,18 @@
 #define pinon(pin) digitalRead(pin)
 
 #define startup 's'
-#define vmotorcontrol 'm'
+#define vstate 'z'
+
+#define vmotorcontrol 'c'
 #define apos 'a'
 #define bpos 'b'
+
+#define setdikte 'd'
+#define setdiepte 'e'
+#define phoogte 'h'
+#define pmes 'm'
+#define pmaxspd 't'
+#define pminspd 'l'
 
 #include "util.h"
 #define cp Serial3 //current communication port
@@ -15,6 +24,13 @@
 
 const short bup = 7, bdown = 6;
 bool bupstate = false, bdownstate = false;
+
+int dikte = -1;
+int diepte = -1;
+int hoogte = 60;
+int mes = 32;
+int maxspd = 64, minspd = 40;
+short maxdif = 100 - maxspd; //NIET AANKOMEN
 
 void setup()
 {
@@ -31,6 +47,9 @@ void setup()
     encb_start();
 
     send(startup);
+
+    send(phoogte, hoogte); send(pmes, mes); send(pmaxspd, maxspd); send(pminspd, minspd);
+	
 }
 
 void loop()
@@ -40,12 +59,12 @@ void loop()
         if (pinon(bup) == HIGH && !bupstate)
         {
             bupstate = true;
-            motorforward();
+            motorupward();
         }
         else if (pinon(bdown) == HIGH && !bdownstate)
         {
             bdownstate = true;
-            motorback();
+            motordownward();
         }
         else if ((bupstate || bdownstate) && pinon(bdown) == LOW && pinon(bup) == LOW)
         {
@@ -56,6 +75,8 @@ void loop()
 
         if(enca.gotref && encb.gotref){
             motorstop();
+            bupstate = false;
+            bdownstate = false;
             break;
         }
         updatepackets();
@@ -63,24 +84,91 @@ void loop()
     }
 
     Serial.println("got the refsss");
+    send(vstate, 1);
 
     while(true){
-        if (enca.pos != enca.prevpos)
+        updatepackets();
+        if(diepte != -1 && dikte != -1){
+            break;
+        }
+        delay(20);
+    }
+
+    Serial.println("ready to plooi");
+    send(vstate, 2);
+    beep(26);
+    delay(26);
+    beep(26);
+
+    while(true){
+        
+        /*if (pinon(bup) == HIGH && !bupstate)
         {
-            detachInterrupt(digitalPinToInterrupt(enca.chr));
-            Serial.print("encoder 1: ");
-            Serial.println(enca.pos);
-            send(apos, enca.pos);
-            enca.prevpos = enca.pos;
+            bupstate = true;
+            motorupward();
+        }
+        else if (pinon(bdown) == HIGH && !bdownstate)
+        {
+            bdownstate = true;
+            motordownward();
+        }*/
+
+        if (pinon(bup) == HIGH && !bupstate)
+        {
+            bupstate = true;
+            motorupward();
+        }
+        if(pinon(bdown) == HIGH && !bdownstate){
+            bdownstate = true;
+            motora.downward(maxspd * 2.55); //van procent naar 0-255
         }
 
-        if (encb.pos != encb.prevpos)
-        {
-            detachInterrupt(digitalPinToInterrupt(encb.chr));
-            Serial.print("encoder 2: ");
-            Serial.println(encb.pos);
-            encb.prevpos = encb.pos;
+        if(pinon(bdown) == HIGH){
+            //compensation routine
+            //posb = posa + dif
+            //<-> dif = posb - posa
+            int posdif = encb.pos - enca.pos;
+            float difspeed = 0;
+            if(posdif > 1){
+                difspeed = min(map(posdif, 0, 400, 10, maxdif), maxdif);
+            }else if(posdif < 1){
+                difspeed = max(map(posdif, 0, -400, -10, -maxdif), -maxdif);
+            }else{
+
+            }
+            motorb.downward(maxspd * 2.55 + difspeed * 2.55);
+            Serial.print("gap: ");
+            Serial.println(posdif);
+            Serial.print("b speed: ");
+            Serial.println(maxspd * 2.55 + difspeed * 2.55);
         }
+
+        if ((bupstate && pinon(bup) == LOW) || (bdownstate && pinon(bdown) == LOW))
+        {
+            bupstate = false;
+            bdownstate = false;
+            motorstop();
+        }
+
+        
+
+        /*if(enca.pos != enca.prevpos){
+            enca.prevpos = enca.pos;
+            Serial.print("enca: ");
+            Serial.println(enca.pos);
+            send(apos, enca.pos);
+        }
+
+        if(encb.pos != encb.prevpos){
+            encb.prevpos = encb.pos;
+            Serial.print("encb: ");
+            Serial.println(encb.pos);
+        }*/
+
+        
+
+        updatepackets();
+        delay(5);
     }
 
     delay(5000);

@@ -21,6 +21,7 @@ public:
     vec transform;
     bool isinput = false;
     bool iscol = false;
+    char tab = 0;
     guitem *parent = nullptr; //this is actually a pointer to a collumn
 
     //virtual function for drawing the types of items
@@ -66,6 +67,7 @@ public:
 
     guitemreturn draw_specific(guiteminput in) override;
     void clear(unsigned short color) const override;
+    void tupdate(String ntext);
 };
 
 class collumn : public guitem
@@ -93,7 +95,7 @@ public:
     int selindex = -1; //which index of the items is selected
     input *selitem = nullptr;
 
-    gui(guitem **mitems, unsigned int milen);
+    gui(guitem **mitems, unsigned int milen, char mtab);
     void draw();
     input *newselect();
 };
