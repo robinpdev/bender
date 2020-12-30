@@ -126,7 +126,7 @@ void loop()
             bdownstate = true;
             bdownstate = true;
             short downspeeda = 0;
-            if(enca.pos - doel > 100){
+            if(enca.pos - doel > 400){
                 downspeeda = maxspd * 2.55; //van procent naar 0-255
             }else{
                 downspeeda = 38 * 2.55;

@@ -1,0 +1,5 @@
+{
+    "sketch": "pwm-frequency-test.ino",
+    "board": "arduino:sam:arduino_due_x_dbg",
+    "port": "COM4"
+}

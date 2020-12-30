@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                "D:\\Users\\Mario Paret\\Documents\\Arduino\\libraries\\**",
+                "D:\\Users\\Mario Paret\\programma's\\arduino\\libraries\\**",
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\**"
+            ],
+            "forcedInclude": [
+                "C:\\Users\\Mario Paret\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\sam\\1.6.12\\cores\\arduino\\Arduino.h"
+            ],
+            "defines": [
+                "USBCON"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "D:/vstudio/testapp/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
