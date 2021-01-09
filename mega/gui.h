@@ -3,10 +3,10 @@ char tabindex = 1;
 #include "gui_predefines.h"
 
 //helper defines
-#define nitems(name) guitem* name[] = 
-#define newcol(name, inarr) collumn name (inarr , sizeof(inarr) / 2)
-#define newgui(name, inarr, index) gui name (inarr, sizeof(inarr) / 2, index)
-#define whenselected(guio, element) if(guio.selitem == &element)
+#define nitems(name) guitem *name[] =
+#define newcol(name, inarr) collumn name(inarr, sizeof(inarr) / 2)
+#define newgui(name, inarr, index) gui name(inarr, sizeof(inarr) / 2, index)
+#define whenselected(guio, element) if (guio.selitem == &element)
 
 //internal helper defines
 #define renewsel true
@@ -68,9 +68,11 @@ void label::clear(unsigned short incol) const
     tft.fillRect(drawpos.x, drawpos.y + labelymargin, prevlen * textsize * 6, textsize * 8, incol);
 }
 
-void label::tupdate(String ntext){
+void label::tupdate(String ntext)
+{
     text = ntext;
-    if(tabindex == tab){
+    if (tabindex == tab)
+    {
         update();
     }
 }
@@ -86,7 +88,27 @@ input::input()
 void input::addchar(char in)
 {
     inputmodified = true;
-    text += in;
+    if (in == '*')
+    {
+        if(text.length() == 0){
+            text += '0';
+        }
+        text += ',';
+    }
+    else
+    {
+        short commaindex = -1;
+        for(short i = 0; i < text.length(); i++){
+            if(text.charAt(i) == ','){
+                commaindex = i + 1;
+                break;
+            }
+        }
+        //limit 
+        if(text.length() - commaindex < 2 || commaindex == -1){
+            text += in;
+        }
+    }
     width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
     this->update();
     this->select(inputselcolor);
@@ -128,13 +150,17 @@ void input::select(short boxcolor)
 
 void input::deselect(unsigned short bgcolor)
 {
+    text = prevtext;
+    update();
     tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, inputboxcolor);
 }
 
-void input::tupdate(String ntext){
+void input::tupdate(String ntext)
+{
     text = ntext;
     width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
-    if(tabindex == tab){
+    if (tabindex == tab)
+    {
         update();
     }
 }

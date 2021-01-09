@@ -1,6 +1,6 @@
 #include "motor.h"
 
-
+#include "packettypes.h"
 
 void handlepacket(char var, String returned){
     Serial.print("received packet (");
@@ -24,6 +24,8 @@ void handlepacket(char var, String returned){
 
         case setdiepte:{
             diepte = returned.toInt();
+            Serial.print("diepte: ");
+            Serial.print(diepte);
             break;
         }
 

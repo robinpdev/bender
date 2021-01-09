@@ -56,6 +56,7 @@ public:
     short width = minwidth;
 
     String text = "";
+    String prevtext = "";
     short color = RED;
     short textsize = 3;
     short prevlen = 0;

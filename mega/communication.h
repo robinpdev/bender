@@ -1,10 +1,15 @@
 #include "packet-types.h"
 
+
+String pulstomm(String in){
+    float pulsen = in.toInt() * 0.02;
+    int nature = pulsen;
+    int frac = (pulsen - nature) * 100;
+    return String(nature) + ',' + String(frac);
+}
+
 void handlepacket(char var, String returned){
-    Serial.print("received packet (");
-    Serial.print(var);
-    Serial.print("): ");
-    Serial.println(returned);
+
     switch(var){
         case startup:{
             statusl.tupdate("status: due gestart, beweeg tot ref");
@@ -17,36 +22,36 @@ void handlepacket(char var, String returned){
             }else if (state == 2){
                 statusl.tupdate("status: beweeg naar doel");
             }
+            break;
         }
 
         case apos:{
-            Serial.println("got apos");
-            posd.tupdate(returned);
+            posd.tupdate(pulstomm(returned));
             break;
         }
 
         
         case setdikte:{
             dikte = returned.toInt();
-            diktei.tupdate(returned);
+            diktei.tupdate(pulstomm(returned));
             break;
         }
 
         case setdiepte:{
             diepte = returned.toInt();
-            dieptei.tupdate(returned);
+            dieptei.tupdate(pulstomm(returned));
             break;
         }
 
         case phoogte:{
             hoogte = returned.toInt();
-            hoogtei.tupdate(returned);
+            hoogtei.tupdate(pulstomm(returned));
             break;
         }
 
         case pmes:{
             mes = returned.toInt();
-            mesi.tupdate(returned);
+            mesi.tupdate(pulstomm(returned));
             break;
         }
 

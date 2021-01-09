@@ -2,19 +2,7 @@
 
 #define pinon(pin) digitalRead(pin)
 
-#define startup 's'
-#define vstate 'z'
-
-#define vmotorcontrol 'c'
-#define apos 'a'
-#define bpos 'b'
-
-#define setdikte 'd'
-#define setdiepte 'e'
-#define phoogte 'h'
-#define pmes 'm'
-#define pmaxspd 't'
-#define pminspd 'l'
+#include "packettypes.h"
 
 #include "util.h"
 #define cp Serial3 //current communication port
@@ -27,7 +15,7 @@ bool bupstate = false, bdownstate = false;
 
 int dikte = -1;
 int diepte = -1;
-int hoogte = 1000;
+int hoogte = 2000;
 int mes = 32;
 int maxspd = 64, minspd = 40;
 short maxdif = 100 - maxspd; //NIET AANKOMEN
@@ -166,18 +154,14 @@ void loop()
 
         
 
-        /*if(enca.pos != enca.prevpos){
+        if(enca.pos != enca.prevpos){
             enca.prevpos = enca.pos;
-            Serial.print("enca: ");
-            Serial.println(enca.pos);
             send(apos, enca.pos);
         }
 
         if(encb.pos != encb.prevpos){
-            encb.prevpos = encb.pos;
-            Serial.print("encb: ");
-            Serial.println(encb.pos);
-        }*/
+
+        }
         
         updatepackets();
         delay(10);

@@ -124,29 +124,30 @@ void loop()
 				{
 					Serial.print("inputted ");
 					Serial.println(cgui->selitem->text);
-					send(setdikte, diktei.text);
+					send(setdikte, stringtofloat(diktei.text) * 50);
 				}
 				else whenselected(guim1, dieptei)
 				{
-					send(setdiepte, dieptei.text);
+					send(setdiepte, int(stringtofloat(dieptei.text) * 50));
 				}
 			}
 			else if (tabindex == 2)
 			{
 				whenselected(guim2, hoogtei){
-					send(phoogte, hoogtei.text);
+					send(phoogte, stringtofloat(hoogtei.text) * 50);
 				}else whenselected(guim2, mesi){
-					send(pmes, mesi.text);
+					send(pmes, stringtofloat(mesi.text) * 50);
 				}else whenselected(guim2, maxspdi){
-					send(pmaxspd, maxspdi.text);
+					send(pmaxspd, stringtofloat(maxspdi.text) * 50);
 				}else whenselected(guim2, minspdi){
-					send(pminspd, minspdi.text);
+					send(pminspd, stringtofloat(minspdi.text) * 50);
 				}
 			}
 			else
 			{
 
 			}
+			cgui->selitem->prevtext = cgui->selitem->text;
 			cgui->selitem->deselect(bgcolor);
 			cgui->selitem = nullptr;
 			cgui->selindex = -1;
@@ -159,10 +160,13 @@ void loop()
 	}
 	else if (readkey == '#')
 	{
+		cgui->selitem->tupdate(cgui->selitem->prevtext);
 		cgui->selitem->deselect(bgcolor);
 		cgui->selitem = nullptr;
 		cgui->selindex = -1;
 		inputmodified = false;
+	}else if(readkey == '*'){
+		cgui->selitem->addchar('*'); //TODO: this pointer may be null, so it might cause errors, this should be researched
 	}
 	else if (readkey == 'A')
 	{
@@ -192,6 +196,9 @@ void loop()
 	{
 		if (cgui->selitem != nullptr)
 		{
+			if(!inputmodified){
+				cgui->selitem->text = "";
+			}
 			cgui->selitem->addchar(readkey);
 		}
 	}
