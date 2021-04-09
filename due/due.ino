@@ -18,6 +18,7 @@ int diepte = -1;
 int hoogte = 2000;
 int mes = 32;
 int maxspd = 64, minspd = 40;
+
 short maxdif = 100 - maxspd; //NIET AANKOMEN
 
 void setup()
@@ -112,26 +113,25 @@ void loop()
 
         if(pinon(bdown) == HIGH){
             bdownstate = true;
-            bdownstate = true;
             short downspeeda = 0;
             if(enca.pos - doel > 400){
                 downspeeda = maxspd * 2.55; //van procent naar 0-255
-            }else{
-                downspeeda = 38 * 2.55;
+            }else{ 
+                downspeeda = 38 * 2.55; //vaste snelheid van 38% wanneer dicht bij doel
             }
             motora.downward(downspeeda);
             
             //compensation routine
             //posb = posa + dif
             //<-> dif = posb - posa
-            int posdif = encb.pos - enca.pos;
+            int posdif = encb.pos - enca.pos; //positieverschil
             float difspeed = 0;
             if(posdif > 1){
                 difspeed = min(map(posdif, 0, 400, 10, maxdif), maxdif);
             }else if(posdif < 1){
                 difspeed = max(map(posdif, 0, -400, -10, -maxdif), -maxdif);
             }else{
-
+                //de snelheid moet exact die van de master zijn
             }
             motorb.downward(downspeeda + difspeed * 2.55);
             Serial.print("gap: ");
