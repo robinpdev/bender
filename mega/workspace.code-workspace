@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "..\\libraries"
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\Documents\\arduino\\libraries\\TFT_HX8357-master"
 		}
 	],
 	"settings": {

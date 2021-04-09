@@ -37,7 +37,7 @@ class label : public guitem
 {
 public:
     String text = "";
-    short color = RED;
+    short color = BLACK;
     short textsize = 3;
     short prevlen = 0;
 

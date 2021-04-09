@@ -1,3 +1,4 @@
+
 #include "graphics.h"
 #include "keypad.h"
 
@@ -103,10 +104,25 @@ void setup()
 
 	// start scherm
 	tft.begin();
-	tft.setRotation(5);
+	tft.setRotation(7);
 	tft.fillScreen(WHITE);
 
+	/*while(true){
+		for(int rotation = 0; rotation <= 7; rotation++){
+			tft.begin();
+			tft.setRotation(rotation);
+			tft.fillScreen(WHITE);
+			tft.setTextSize(8);
+			tft.setTextColor(RED);
+			tftsetCursor(20,20);
+			tft.print(rotation);
+			delay(2000);
+		}
+	}*/
+
 	drawtab();
+
+	//gradient(0, 0, 480, 60, RED, ORANGE, dir_ltr);
 
 	send(startup);
 }
@@ -114,6 +130,9 @@ void setup()
 void loop()
 {
 	char readkey = keypad.getKey();
+	if(readkey != 0){
+		Serial.println(readkey);
+	}
 	if (readkey == 'D')
 	{
 		if (inputmodified)
@@ -160,7 +179,6 @@ void loop()
 	}
 	else if (readkey == '#')
 	{
-		cgui->selitem->tupdate(cgui->selitem->prevtext);
 		cgui->selitem->deselect(bgcolor);
 		cgui->selitem = nullptr;
 		cgui->selindex = -1;
@@ -221,7 +239,7 @@ void drawtab()
 {
 	tft.fillRect(0, 0, 480, 270, WHITE);
 
-	tft.fillRect(0, 270, 480, 50, RED);
+	tft.fillRect(0, 270, 480, 50, BLACK);
 	unsigned short tabcols[] = {0, 0, 0};
 	switch (tabindex)
 	{

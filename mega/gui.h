@@ -135,7 +135,7 @@ guitemreturn input::draw_specific(guiteminput in)
 
 void input::clear(unsigned short color) const
 {
-    tft.fillRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, color);
+    tft.fillRect(drawpos.x, drawpos.y + boxmargin - 1, width, textsize * 8 + 2 * boxpadding + 1, color);
 }
 
 void input::select(short boxcolor)
@@ -150,7 +150,9 @@ void input::select(short boxcolor)
 
 void input::deselect(unsigned short bgcolor)
 {
+    clear(bgcolor);
     text = prevtext;
+    width = max(minwidth, text.length() * 6 * textsize + 2 * boxpadding);
     update();
     tft.drawRect(drawpos.x, drawpos.y + boxmargin, width, textsize * 8 + 2 * boxpadding, inputboxcolor);
 }

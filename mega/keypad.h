@@ -10,7 +10,12 @@ char hexaKeys[ROWS][COLS] = {
 };
 
 //definiering van de pins waarop de keypad is aangesloten
-byte rowPins[ROWS] = {A0, A1, A2, A3}; 
-byte colPins[COLS] = {A4, A5, A6, A7}; 
+//de pins van de keypad normaal aangesloten
+//byte rowPins[ROWS] = {A0, A1, A2, A3}; 
+//byte colPins[COLS] = {A4, A5, A6, A7}; 
+
+//de pins van de keypad, omgekeerd, zoals in de case
+byte rowPins[ROWS] = {A7, A6, A5, A4}; 
+byte colPins[COLS] = {A3, A2, A1, A0}; 
 //maak object keypad
 Keypad keypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
